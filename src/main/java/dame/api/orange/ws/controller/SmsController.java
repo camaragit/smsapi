@@ -28,7 +28,6 @@ public class SmsController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private HistoRepo histoRepo;
     @PostMapping(value ="sendsms")
