@@ -12,7 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Base64;
 @Component
 public class Utils {
+    public static final String[] SUFFIX = {"77","76","70","78"};
     public static final String BASEURL ="https://api.orange.com/";
+    public static  String EMAIL ="";
     public static final String CLIENTID = "Sir2w4bXgGTIQbnyR2qkXltnPyduie1V";
     public static final String CLIENTSECRET = "GhgmWjZttCJjuikf";
     public static final String TOENCODE = CLIENTID+":"+CLIENTSECRET;
@@ -43,9 +45,8 @@ public class Utils {
         }
 
     }
-    public static void sendSms(String numtel,String message){
+    public static Boolean sendSms(String numtel,String message){
         if(nbreSMSRestant()>0){
-            numtel = numtel.replaceAll("\\s+","");
             message = StringUtils.stripAccents(message);
             System.out.println("message vaut "+message);
             System.out.println("telephone vaut "+numtel);
@@ -60,15 +61,16 @@ public class Utils {
             try {
                 ResponseEntity<String> rep = restTemplate.postForEntity(urlSendSMS, entity , String.class );
                 System.out.println(rep.getBody());
+                System.out.println("STATUT REPONSE "+rep.getStatusCodeValue());
+
+                return rep.getStatusCodeValue()==201;
             }
             catch (Exception e){
                 System.out.println("Message d'erreur "+e.getMessage()+" "+new Object(){}.getClass().getEnclosingMethod().getName());
-
+                return false;
             }
         }
-        else
-        System.out.println("Vous n'avez plus sms");
-
+        else return false;
 
     }
     public static int nbreSMSRestant(){

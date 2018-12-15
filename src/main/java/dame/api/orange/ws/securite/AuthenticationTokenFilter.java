@@ -1,5 +1,6 @@
 package dame.api.orange.ws.securite;
 import dame.api.orange.ws.utils.JwtTokenUtil;
+import dame.api.orange.ws.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             System.out.println("userDetails "+userDetails.getUsername());
             boolean isValid = jwtTokenUtil.validateToken(autToken,userDetails);
             if(isValid){
+                Utils.EMAIL = username;
                 System.out.println("Validite Ok");
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
